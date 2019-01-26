@@ -1,0 +1,20 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "The 24 Hour Video Website",
+  "local-web-server":{
+    "forbid": ":.json"
+  },
+  "scripts": {
+    "start": "ws -p 8100",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "npm": "^6.7.0"
+  },
+  "devDependencies": {
+    "local-web-server": "^2.6.1"
+  }
+}
