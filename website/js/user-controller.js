@@ -66,6 +66,8 @@ var userController = {
         $.ajaxSetup({
             'beforeSend': function (xhr) {
                 xhr.setRequestHeader('Authorization', localStorage.getItem('accessToken') + ' ' + localStorage.getItem('userToken'));
+    //xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('userToken')); // original code
+//                xhr.setRequestHeader('Authorization', localStorage.getItem('userToken')); 
             }
         });
     },
