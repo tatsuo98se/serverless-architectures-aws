@@ -1,0 +1,11 @@
+{
+  "name": "@tatsuo98se/ses-sendmail",
+  "version": "1.0.0",
+  "main": "email.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tatsuo-fukushima",
+  "license": "ISC",
+  "description": ""
+}
