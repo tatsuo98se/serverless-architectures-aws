@@ -35,5 +35,6 @@ var videoController = {
 
             this.uiElements.videoList.prepend(clone);
         }
+        this.uiElements.videoCardTemplate.remove();
     }
 }
