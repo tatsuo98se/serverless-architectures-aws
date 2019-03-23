@@ -31,7 +31,8 @@ var videoController = {
             var video = data.files[i];
             var clone = this.uiElements.videoCardTemplate.clone().attr('id', 'video-' + i);
 
-            clone.find('source').attr('src', baseUrl + '/' + bucket + '/' + video.filename);
+//            clone.find('source').attr('src', baseUrl + '/' + bucket + '/' + video.filename);
+            clone.find('source').attr('src', video.filename)
 
             this.uiElements.videoList.prepend(clone);
         }

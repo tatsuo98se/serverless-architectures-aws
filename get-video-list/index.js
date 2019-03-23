@@ -56,8 +56,12 @@ function createList(encoding, data, next) {
                 continue;
             }
         }
+
+        var params = {Bucket: process.env.BUCKET, Key: decodeURIComponent(file.Key), Expires: 18000};
+        var url = s3.getSignedUrl('getObject', params)
+
         files.push({
-            'filename': file.Key,
+            'filename': url,
             'eTag': file.ETag.replace(/"/g,""),
              'size': file.Size});
     }

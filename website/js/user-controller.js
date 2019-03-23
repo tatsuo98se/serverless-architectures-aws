@@ -8,7 +8,8 @@ var userController = {
         logoutButton: null,
         profileButton: null,
         profileNameLabel: null,
-        profileImage: null
+        profileImage: null,
+        uploadButton: null
     },
     init: function (config) {
         var that = this;
@@ -18,11 +19,12 @@ var userController = {
         this.uiElements.profileButton = $('#user-profile');
         this.uiElements.profileNameLabel = $('#profilename');
         this.uiElements.profileImage = $('#profilepicture');
+        this.uiElements.uploadButton = $('#upload-video-button');
 
         this.data.config = config;
         // v9
         // this.data.auth0Lock = new Auth0Lock(config.auth0.clientId, config.auth0.domain);
-        this.data.auth0Lock = new Auth0Lock(config.auth0.clientId, config.auth0.domain, {
+        var option = {
             popup: true,
             auth: {
                 responseType: 'token id_token',
@@ -30,7 +32,8 @@ var userController = {
                     scope: 'openid email user_metadata picture'
                 }
             }
-        });
+        };
+        this.data.auth0Lock = new Auth0Lock(config.auth0.clientId, config.auth0.domain, option);
         this.data.auth0Lock.on('authenticated', function (authResult) {
             console.log("debug");
 
@@ -79,6 +82,7 @@ var userController = {
             // auth0 lockでは、localhost実行の間は、ニックネームとユーザーアイコンの取得は404になる
             this.uiElements.profileNameLabel.text(profile.email);
             this.uiElements.profileImage.attr('src', profile.picture);
+            this.uiElements.uploadButton.css('display', 'inline-block');
         }
 
         this.uiElements.loginButton.toggle(!showAuthenticationElements);
@@ -98,6 +102,7 @@ var userController = {
 
             that.uiElements.logoutButton.hide();
             that.uiElements.profileButton.hide();
+            that.uiElements.uploadButton.hide();
             that.uiElements.loginButton.show();
         });
         this.uiElements.profileButton.click(function (e) {
