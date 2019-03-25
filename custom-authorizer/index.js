@@ -64,12 +64,21 @@ exports.handler = function(event, context, callback){
     var option = {
         algorithms: ["RS256"]
     }
+
     jwt.verify(token, secretBuffer, option, function(err, decoded){
     	if(err){
     		console.log('Failed jwt verification: ', err, 'auth: ', event.authorizationToken);
     		callback('Authorization Failed');
     	} else {
-    		callback(null, generatePolicy('user', 'allow', event.methodArn));
+            var resourceIdx = event.methodArn.lastIndexOf('/');
+            var withoutResource = event.methodArn.substring(0, resourceIdx);
+        
+            var methodIdx = withoutResource.lastIndexOf('/');
+            var withoutMethod = withoutResource.substring(0, methodIdx);
+        
+            console.log("allow : " + withoutMethod);
+        
+    		callback(null, generatePolicy('user', 'allow', withoutMethod + '/*'));
     	}
     })
 };
