@@ -68,9 +68,7 @@ var userController = {
     configureAuthenticatedRequests: function () {
         $.ajaxSetup({
             'beforeSend': function (xhr) {
-                xhr.setRequestHeader('Authorization', localStorage.getItem('accessToken') + ' ' + localStorage.getItem('userToken'));
-    //xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('userToken')); // original code
-//                xhr.setRequestHeader('Authorization', localStorage.getItem('userToken')); 
+                xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('userToken')); // original code
             }
         });
     },
@@ -106,7 +104,8 @@ var userController = {
             that.uiElements.loginButton.show();
         });
         this.uiElements.profileButton.click(function (e) {
-            var url = that.data.config.apiBaseUrl + '/user-profile';
+            var url = that.data.config.apiBaseUrl + '/user-profile?token=' + localStorage.getItem('accessToken');
+//            var url = that.data.config.apiBaseUrl + '/user-profile';
 
             $.get(url, function (data, status) {
                 $('#user-profile-raw-json').text(JSON.stringify(data, null, 2));

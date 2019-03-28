@@ -40,7 +40,10 @@ exports.handler = function(event, context, callback){
     	return;
     }
 
-    var accessToken = event.authToken.split(' ')[0];
+    // API Gatewayのコンソールでマッピングテンプレートに以下の変数を登録する必要あり。
+    // accessTokenにはquery parameterで
+    // userTokenは、Authorizationヘッダーに格納する
+    var accessToken = event.accessToken;
     var userToken = event.authToken.split(' ')[1];
 //    var token = event.authToken;
     console.log("event.authToken: " + event.authToken);

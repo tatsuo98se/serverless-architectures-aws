@@ -33,7 +33,6 @@ exports.handler = function(event, context, callback){
     }
 
     //var token = event.authorizationToken.split(' ')[1]; // original code
-    var accessToken = event.authorizationToken.split(' ')[0];
     var userToken = event.authorizationToken.split(' ')[1];
     var token = userToken;
 
