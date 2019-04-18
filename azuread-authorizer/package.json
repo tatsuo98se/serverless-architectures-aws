@@ -1,0 +1,18 @@
+{
+  "name": "azuread-authorizer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "aws lambda update-function-code --function-name arn:aws:lambda:us-east-1:974872526065:function:azuread-authorizer --zip-file fileb://Lambda-Deployment.zip",
+    "predeploy": "zip -r Lambda-Deployment.zip * -x *.zip *.json *.log"
+  },
+  "dependencies": {
+    "request": "^2.88.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "run-local-lambda": "^1.1.1"
+  }
+}
