@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+<head>
+</head>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.js"></script>
+<script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+
+
+    var msalConfig = {
+        auth: {
+            clientId: "007bd2bf-8a74-4fed-8525-5e9b6893e931",
+            authority: "https://login.microsoftonline.com/common"
+            //            authority: "https://login.microsoftonline.com/organizations"
+        },
+        cache: {
+            cacheLocation: "localStorage",
+            storeAuthStateInCookie: true
+        }
+    };
+
+    var myMSALObj = new Msal.UserAgentApplication(msalConfig);
+    var request = {
+        scopes: ["user.read"]
+    };
+    myMSALObj.handleRedirectCallback((error, response) => {
+        console.log(response);
+
+        switch (response.tokenType) {
+            case 'id_token':
+                console.log('id_token' + response.idToken);
+                myMSALObj.acquireTokenRedirect(request)
+                break;
+            case 'access_token':
+                console.log('access_token: ' + response.accessToken);
+                localStorage.setItem('loglake_access_token', response.accessToken);
+                loadContent();
+                break;
+        }
+
+    });
+
+    function setUp() {
+        $.ajaxSetup({
+            'beforeSend': function (xhr) {
+                let accessToken = localStorage.loglake_access_token;
+                if (accessToken) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+                }
+                else {
+                    xhr.setRequestHeader('Authorization', '');
+                }
+            }
+        });
+    }
+    function loadContent() {
+        setUp();
+
+        $.get("https://7b0nazdjs4.execute-api.us-east-1.amazonaws.com/dev/hello")
+            .done(function (data) {
+                $('#content').text('Success!!. API Gateway Returns: ' + data.body);
+            })
+            .fail((xhr, textStatus, errorThrown) => {
+                $('#content').text('Request Failed: ' + textStatus);
+            });
+
+    }
+
+    window.onload = () => {
+
+        loadContent();
+
+
+        $('#login').on('click', () => {
+            console.log("logon");
+            myMSALObj.loginRedirect(request);
+        });
+        $('#logout').on('click', () => {
+            console.log("logout");
+            //myMSALObj.logout();
+            localStorage.removeItem('loglake_access_token');
+            loadContent();
+        });
+    }
+</script>
+
+<body>
+    <div class="text" id="content"></div><br>
+    <button class="btn" id="login">Login</button><br>
+    <button class="btn" id="logout">Logout</button><br>
+</body>
+
+</html>

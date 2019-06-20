@@ -9,7 +9,7 @@
 
 var request = require('request');
 
-var generatePolicy = function(principalId, effect, resource) {
+var generatePolicy = function (principalId, effect, resource) {
     var authResponse = {};
     authResponse.principalId = principalId;
     if (effect && resource) {
@@ -26,38 +26,43 @@ var generatePolicy = function(principalId, effect, resource) {
     return authResponse;
 }
 
-exports.handler = function(event, context, callback){
+exports.handler = async function (event, context, callback) {
     if (!event.authorizationToken) {
-    	callback('Could not find authToken');
-    	return;
+        callback('Could not find authToken');
+        return;
     }
 
     var token = event.authorizationToken.split(' ')[1]; // original code
     console.log("callGraph: " + token);
 
     var options = {
-        url : 'https://graph.microsoft.com/v1.0/me',
-        method : 'GET',
+        url: 'https://graph.microsoft.com/v1.0/me',
+        method: 'GET',
         headers: {
-            'Authorization' : "Bearer " + token
+            'Authorization': "Bearer " + token
         }
     }
 
-    request(options, function(error, response, body){
-        if(error){
-    		callback('Authorization Failed');
-        }else{
-            console.log("response: " + JSON.stringify(response));
+    const promise = new Promise(function (resolve, reject) {
+        request(options, function (error, response, body) {
+            if (error) {
+                console.log('request failed.')
+                reject(error);
+            } else {
+                console.log("response: " + JSON.stringify(response));
 
-            var resourceIdx = event.methodArn.lastIndexOf('/');
-            var withoutResource = event.methodArn.substring(0, resourceIdx);
-        
-            var methodIdx = withoutResource.lastIndexOf('/');
-            var withoutMethod = withoutResource.substring(0, methodIdx);
-        
-            console.log("allow : " + withoutMethod);
-        
-    		callback(null, generatePolicy('user', 'allow', withoutMethod + '/*'));
-        }
+                var resourceIdx = event.methodArn.lastIndexOf('/');
+                var withoutResource = event.methodArn.substring(0, resourceIdx);
+
+                var methodIdx = withoutResource.lastIndexOf('/');
+                var withoutMethod = withoutResource.substring(0, methodIdx);
+
+                console.log("allow : " + withoutMethod);
+
+                resolve(generatePolicy('user', 'allow', withoutMethod + '/*'));
+            }
+        });
     });
+    return promise;
+
 };
