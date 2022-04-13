@@ -11,7 +11,7 @@
     "predeploy": "zip -r Lambda-Deployment.zip * -x *.zip *.json *.log"
   },
   "dependencies": {
-    "async": "^2.6.1",
+    "async": "^3.2.2",
     "aws-sdk": "latest",
     "sinon-chai": "^3.3.0"
   },
