@@ -9,7 +9,7 @@
     "predeploy": "zip -r Lambda-Deployment.zip * -x *.zip *.json *.log"
   },
   "dependencies": {
-    "async": "^2.0.0",
+    "async": "^3.2.2",
     "aws-sdk": "latest",
     "crypto": "0.0.3"
   },
