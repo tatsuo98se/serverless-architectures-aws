@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@tatsuo98se/ses-sendmail": "^1.0.0",
-    "async": "^2.6.1",
+    "async": "^3.2.2",
     "aws-sdk": "latest"
   },
   "author": "",
